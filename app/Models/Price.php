@@ -9,6 +9,8 @@ class Price extends Model
 {
     use HasFactory;
 
+    protected $table = 'price';
+
     protected $fillable = ['timeslot_id', 'fieldtype_id', 'value'];
 
     public function timeSlot()

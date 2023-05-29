@@ -9,6 +9,8 @@ class Booking extends Model
 {
     use HasFactory;
 
+    protected $table = 'booking';
+
     protected $fillable = ['field_timeslot_id', 'customer_id', 'customer_name', 'phone_number', 'date_book', 'price', 'status_id'];
 
     public function fieldTimeSlot()

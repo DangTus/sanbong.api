@@ -9,6 +9,8 @@ class LocationFieldType extends Model
 {
     use HasFactory;
 
+    protected $table = 'location_fieldtype';
+
     protected $fillable = ['location_id', 'fieldtype_id'];
 
     public function location()

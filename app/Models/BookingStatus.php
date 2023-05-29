@@ -9,5 +9,7 @@ class BookingStatus extends Model
 {
     use HasFactory;
 
+    protected $table = 'booking_status';
+
     protected $fillable = ['name'];
 }

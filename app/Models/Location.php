@@ -9,6 +9,8 @@ class Location extends Model
 {
     use HasFactory;
 
+    protected $table = 'location';
+
     protected $fillable = ['name', 'description', 'owner_id', 'image', 'time_open', 'time_close', 'ward_id', 'address', 'status_id'];
 
     public function owner()

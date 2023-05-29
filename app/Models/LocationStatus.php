@@ -9,6 +9,8 @@ class LocationStatus extends Model
 {
     use HasFactory;
 
+    protected $table = 'location_status';
+
     protected $fillable = ['name'];
 
     public function location()

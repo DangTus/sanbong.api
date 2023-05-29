@@ -9,5 +9,7 @@ class FieldTimeSlotStatus extends Model
 {
     use HasFactory;
 
+    protected $table = 'field_timeslot_status';
+
     protected $fillable = ['name'];
 }

@@ -9,6 +9,8 @@ class Province extends Model
 {
     use HasFactory;
 
+    protected $table = 'province';
+
     protected $fillable = ['name', 'priority'];
 
     public function districts()

@@ -9,6 +9,8 @@ class Field extends Model
 {
     use HasFactory;
 
+    protected $table = 'field';
+
     protected $fillable = ['name', 'description', 'image', 'type_id', 'status_id'];
 
     public function type()

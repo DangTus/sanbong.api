@@ -9,5 +9,7 @@ class FieldStatus extends Model
 {
     use HasFactory;
 
+    protected $table = 'field_status';
+
     protected $fillable = ['name'];
 }
