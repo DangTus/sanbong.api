@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Owner;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\User;
+use App\Http\Resources\UserResource;
 
 class LoginController extends Controller
 {
@@ -37,7 +38,7 @@ class LoginController extends Controller
             ]);
         }
 
-        $owner = User::where('email', $req->email)->where('password', $req->password)->where('role_id', 2)->first();
+        $owner = User::where('email', $req->email)->where('password', $req->password)->first();
 
         if ($owner) {
             if ($owner->status_id == 3) {
@@ -51,7 +52,7 @@ class LoginController extends Controller
 
                 return response()->json([
                     'status' => 'success',
-                    'data' => $owner
+                    'data' => UserResource::make($owner)
                 ]);
             }
         } else {

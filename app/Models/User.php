@@ -20,12 +20,12 @@ class User extends Model
         return $this->hasOne(Ward::class, 'id', 'ward_id');
     }
 
-    public function userRole()
+    public function role()
     {
         return $this->hasOne(UserRole::class, 'id', 'role_id');
     }
 
-    public function userStatus()
+    public function status()
     {
         return $this->hasOne(UserStatus::class, 'id', 'status_id');
     }
