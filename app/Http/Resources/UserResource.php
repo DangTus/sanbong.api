@@ -23,8 +23,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'ward' => WardResource::make($this->ward),
             'address' => $this->address,
-            'role' => UserRoleResource::make($this->role),
-            'status' => UserStatusResource::make($this->status),
+            'role' => $this->role,
+            'status' => $this->status,
             'created_at' => $this->created_at->format('H:i:s Y-m-d')
         ];
     }

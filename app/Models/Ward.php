@@ -11,7 +11,9 @@ class Ward extends Model
 
     protected $table = 'ward';
 
-    protected $fillable = ['name', 'district_id'];
+    protected $fillable = ['name'];
+
+    protected $hidden = ['district_id', 'created_at', 'updated_at'];
 
     public function district()
     {

@@ -7,6 +7,7 @@ use App\Http\Controllers\Owner;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,13 @@ Route::get('/test', [LoginController::class, 'test']);
 
 Route::post('/login', [LoginController::class, 'login']);
 
+// Address
+Route::get('/province', [AddressController::class, 'allProvince']);
+Route::get('/district', [AddressController::class, 'districtByProvince']);
+Route::get('/ward', [AddressController::class, 'wardByDistrict']);
+Route::get('/ward-detail', [AddressController::class, 'wardByID']);
+
+// Admin
 Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/', [AdminController::class, 'dashboard']);

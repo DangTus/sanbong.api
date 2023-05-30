@@ -17,7 +17,7 @@ class DistrictResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'province' => ProvinceResource::make($this->province)
+            'province' => $this->province
         ];
     }
 }

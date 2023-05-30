@@ -29,7 +29,7 @@ class UserController extends Controller
             ]);
         }
 
-        $owner = User::findOrFail($req->id);
+        $owner = User::find($req->id);
 
         $owner->status_id = $req->status_id;
         $owner->save();

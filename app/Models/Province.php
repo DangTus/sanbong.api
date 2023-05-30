@@ -11,7 +11,9 @@ class Province extends Model
 
     protected $table = 'province';
 
-    protected $fillable = ['name', 'priority'];
+    protected $fillable = ['name'];
+
+    protected $hidden = ['priority', 'created_at', 'updated_at'];
 
     public function districts()
     {
