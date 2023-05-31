@@ -13,10 +13,17 @@ class Ward extends Model
 
     protected $fillable = ['name'];
 
-    protected $hidden = ['district_id', 'created_at', 'updated_at'];
-
     public function district()
     {
         return $this->hasOne(District::class, 'id', 'district_id');
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'district' => $this->district
+        ];
     }
 }

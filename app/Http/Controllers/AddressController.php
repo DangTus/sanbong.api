@@ -64,9 +64,8 @@ class AddressController extends Controller
         if ($req->ward_id) {
 
             $ward = Ward::where('id', $req->ward_id)->first();
-            $wardResource = WardResource::make($ward);
 
-            return $wardResource;
+            return $ward;
         } else {
 
             return response()->json([

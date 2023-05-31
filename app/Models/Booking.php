@@ -11,11 +11,18 @@ class Booking extends Model
 
     protected $table = 'booking';
 
-    protected $fillable = ['field_timeslot_id', 'customer_id', 'customer_name', 'phone_number', 'date_book', 'price', 'status_id'];
+    protected $fillable = ['timeslot_id', 'field_id', 'customer_id', 'customer_name', 'phone_number', 'date_book', 'price', 'note', 'log', 'status_id'];
 
-    public function fieldTimeSlot()
+    protected $hidden = ['updated_at'];
+
+    public function timeSlot()
     {
-        return $this->hasOne(FieldTimeSlot::class, 'id', 'field_timeslot_id');
+        return $this->hasOne(TimeSlot::class, 'id', 'timeslot_id');
+    }
+
+    public function field()
+    {
+        return $this->hasOne(Field::class, 'id', 'field_id');
     }
 
     public function customer()

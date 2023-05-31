@@ -13,8 +13,6 @@ class District extends Model
 
     protected $fillable = ['name'];
 
-    protected $hidden = ['province_id', 'created_at', 'updated_at'];
-
     public function province()
     {
         return $this->hasOne(Province::class, 'id', 'province_id');
@@ -23,5 +21,14 @@ class District extends Model
     public function wards()
     {
         return $this->hasMany(Ward::class, 'district_id', 'id');
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'province' => $this->province
+        ];
     }
 }

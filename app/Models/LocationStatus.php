@@ -13,8 +13,5 @@ class LocationStatus extends Model
 
     protected $fillable = ['name'];
 
-    public function location()
-    {
-        return $this->hasMany(Location::class, 'status_id', 'id');
-    }
+    protected $hidden = ['created_at', 'updated_at'];
 }

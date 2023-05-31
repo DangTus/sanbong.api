@@ -11,7 +11,7 @@ class Price extends Model
 
     protected $table = 'price';
 
-    protected $fillable = ['timeslot_id', 'fieldtype_id', 'value'];
+    protected $fillable = ['timeslot_id', 'fieldtype_id', 'location_id', 'value'];
 
     public function timeSlot()
     {
@@ -20,6 +20,28 @@ class Price extends Model
 
     public function fieldType()
     {
-        return $this->hasOne(LocationFieldType::class, 'id', 'fieldtype_id');
+        return $this->hasOne(FieldType::class, 'id', 'fieldtype_id');
+    }
+
+    public function location()
+    {
+        return $this->hasOne(Location::class, 'id', 'location_id');
+    }
+
+    public function getStatus($fieldID, $dateBook)
+    {
+        $isBooking = Booking::where('timeslot_id', $this->timeslot_id)
+            ->where('field_id', $fieldID)
+            ->where('date_book', $dateBook)
+            ->whereIn('status_id', [1, 2])
+            ->get();
+        $status = $isBooking->count() ? 'not-ready' : 'ready';
+
+        return [
+            'id' => $this->id,
+            'timeSlot' => $this->timeSlot,
+            'value' => $this->value,
+            'status' => $status
+        ];
     }
 }

@@ -28,8 +28,21 @@ class Location extends Model
         return $this->hasOne(LocationStatus::class, 'id', 'status_id');
     }
 
-    public function locationFieldTypes()
+    public function toArray()
     {
-        return $this->hasMany(LocationFieldType::class, 'location_id', 'id');
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'owner' => $this->owner,
+            'image' => $this->image,
+            'time_open' => $this->time_open,
+            'time_close' => $this->time_close,
+            'address' => [
+                'ward' => $this->ward,
+                'description' => $this->address
+            ],
+            'status' => $this->status
+        ];
     }
 }

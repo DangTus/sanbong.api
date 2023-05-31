@@ -12,4 +12,6 @@ class FieldStatus extends Model
     protected $table = 'field_status';
 
     protected $fillable = ['name'];
+
+    protected $hidden = ['created_at', 'updated_at'];
 }

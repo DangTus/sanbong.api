@@ -12,4 +12,6 @@ class BookingStatus extends Model
     protected $table = 'booking_status';
 
     protected $fillable = ['name'];
+
+    protected $hidden = ['created_at', 'updated_at'];
 }

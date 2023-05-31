@@ -13,8 +13,10 @@ class FieldType extends Model
 
     protected $fillable = ['name'];
 
-    public function locationFieldTypes()
+    protected $hidden = ['created_at', 'updated_at'];
+
+    public function prices()
     {
-        return $this->hasMany(LocationFieldType::class, 'fieldtype_id', 'id');
+        return $this->hasMany(Price::class, 'fieldtype_id', 'id');
     }
 }

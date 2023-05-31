@@ -29,4 +29,22 @@ class User extends Model
     {
         return $this->hasOne(UserStatus::class, 'id', 'status_id');
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'image' => $this->image,
+            'dob' => $this->dob,
+            'phone_number' => $this->phone_number,
+            'email' => $this->email,
+            'address' => [
+                'ward' => $this->ward,
+                'description' => $this->address
+            ],
+            'role' => $this->role,
+            'status' => $this->status
+        ];
+    }
 }
