@@ -11,14 +11,9 @@ class User extends Model
 
     protected $table = 'user';
 
-    protected $fillable = ['name', 'image', 'dob', 'phone_number', 'email', 'password', 'ward_id', 'address', 'role_id', 'status_id'];
+    protected $fillable = ['name', 'dob', 'phone_number', 'email', 'password', 'role_id', 'status_id'];
 
     protected $hidden = ['password'];
-
-    public function ward()
-    {
-        return $this->hasOne(Ward::class, 'id', 'ward_id');
-    }
 
     public function role()
     {
@@ -35,14 +30,9 @@ class User extends Model
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image,
             'dob' => $this->dob,
             'phone_number' => $this->phone_number,
             'email' => $this->email,
-            'address' => [
-                'ward' => $this->ward,
-                'description' => $this->address
-            ],
             'role' => $this->role,
             'status' => $this->status
         ];

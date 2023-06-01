@@ -9,7 +9,7 @@ use App\Http\Controllers\Customer;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AddressController;
-use App\Http\Controllers\LocationController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +26,6 @@ use App\Http\Controllers\LocationController;
 //     return $request->user();
 // });
 
-Route::get('/test', [LoginController::class, 'test']);
-
 Route::post('/login', [LoginController::class, 'login']);
 
 // Address
@@ -39,16 +37,13 @@ Route::get('/ward-detail', [AddressController::class, 'wardByID']);
 // Location
 Route::group(['prefix' => 'location'], function () {
 
-    Route::get('/by-ward', [Customer\LocationController::class, 'getByWard']);
+    Route::get('/by-ward', [Customer\LocationController::class, 'locationByWard']);
+    Route::get('/by-id', [Customer\LocationController::class, 'locationByID']);
+    Route::get('/time-slot', [Customer\LocationController::class, 'timeSlot']);
 });
 
-// Field
-Route::group(['prefix' => 'field'], function () {
-
-    Route::get('/', [Customer\FieldController::class, 'getField']);
-    Route::get('/detail', [Customer\FieldController::class, 'getFieldByID']);
-    Route::get('/time-slot', [Customer\FieldController::class, 'getTimeSlotByField']);
-});
+Route::get('/field-type', [HomeController::class, 'fieldType']);
+Route::get('/field-by-type-and-location', [Customer\FieldController::class, 'fieldByTypeAndLocation']);
 
 // Admin
 Route::group(['prefix' => 'admin'], function () {

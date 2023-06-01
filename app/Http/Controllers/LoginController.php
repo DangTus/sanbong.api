@@ -10,13 +10,6 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
-    public function test()
-    {
-        return response()->json([
-            'data' => 'Tus'
-        ]);
-    }
-
     public function login(Request $req)
     {
         $validator = Validator::make($req->all(), [

@@ -11,7 +11,7 @@ class Location extends Model
 
     protected $table = 'location';
 
-    protected $fillable = ['name', 'description', 'owner_id', 'image', 'time_open', 'time_close', 'ward_id', 'address', 'status_id'];
+    protected $fillable = ['name', 'description', 'owner_id', 'image', 'time_open', 'time_close', 'ward_id', 'address', 'link_map', 'status_id'];
 
     public function owner()
     {
@@ -28,6 +28,32 @@ class Location extends Model
         return $this->hasOne(LocationStatus::class, 'id', 'status_id');
     }
 
+    private function getImage()
+    {
+        $listImage = json_decode($this->image);
+        $listImageNew = [];
+
+        foreach ($listImage as $image) {
+            $imageNew = app()->make('url')->to('/') . $image;
+            array_push($listImageNew, $imageNew);
+        }
+
+        return $listImageNew;
+    }
+
+    private function getPriceRange()
+    {
+        $price = Price::where('location_id', $this->id);
+
+        $maxPrice = $price->max('value');
+        $minPrice = $price->min('value');
+
+        return [
+            'max' => $maxPrice,
+            'min' => $minPrice
+        ];
+    }
+
     public function toArray()
     {
         return [
@@ -35,13 +61,15 @@ class Location extends Model
             'name' => $this->name,
             'description' => $this->description,
             'owner' => $this->owner,
-            'image' => $this->image,
+            'image' => $this->getImage(),
             'time_open' => $this->time_open,
             'time_close' => $this->time_close,
+            'price' => $this->getPriceRange(),
             'address' => [
                 'ward' => $this->ward,
                 'description' => $this->address
             ],
+            'link_map' => $this->link_map,
             'status' => $this->status
         ];
     }
