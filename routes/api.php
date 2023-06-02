@@ -40,10 +40,23 @@ Route::group(['prefix' => 'location'], function () {
     Route::get('/by-ward', [Customer\LocationController::class, 'locationByWard']);
     Route::get('/by-id', [Customer\LocationController::class, 'locationByID']);
     Route::get('/time-slot', [Customer\LocationController::class, 'timeSlot']);
+    Route::post('/book-field', [Customer\LocationController::class, 'bookField']);
 });
 
 Route::get('/field-type', [HomeController::class, 'fieldType']);
 Route::get('/field-by-type-and-location', [Customer\FieldController::class, 'fieldByTypeAndLocation']);
+
+// Owner
+Route::group(['prefix' => 'owner'], function () {
+
+    // Location
+    Route::group(['prefix' => 'location'], function () {
+
+        Route::get('/', [Owner\LocationController::class, 'locationByUser']);
+        Route::post('/update', [Owner\LocationController::class, 'updateLocation']);
+        Route::get('/all-status', [Owner\LocationController::class, 'allStatus']);
+    });
+});
 
 // Admin
 Route::group(['prefix' => 'admin'], function () {
