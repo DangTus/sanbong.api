@@ -38,8 +38,9 @@ class Price extends Model
         $status = $isBooking->count() ? 'not-ready' : 'ready';
 
         return [
-            'id' => $this->id,
-            'timeSlot' => $this->timeSlot,
+            'timeslot_id' => $this->timeSlot->id,
+            'times_start' => $this->timeSlot->time_start,
+            'time_end' => $this->timeSlot->time_end,
             'value' => $this->value,
             'status' => $status
         ];

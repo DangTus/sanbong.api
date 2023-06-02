@@ -34,7 +34,7 @@ class Location extends Model
         $listImageNew = [];
 
         foreach ($listImage as $image) {
-            $imageNew = app()->make('url')->to('/') . $image;
+            $imageNew = app()->make('url')->to('/') . '/public/imgs/location/' . $image;
             array_push($listImageNew, $imageNew);
         }
 

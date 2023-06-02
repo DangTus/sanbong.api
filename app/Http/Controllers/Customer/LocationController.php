@@ -32,7 +32,7 @@ class LocationController extends Controller
     {
         if ($req->location_id) {
 
-            $location = Location::where('id', $req->location_id)->where('status_id', 1)->get();
+            $location = Location::where('id', $req->location_id)->where('status_id', 1)->first();
 
             return response()->json([
                 'status' => 'success',
