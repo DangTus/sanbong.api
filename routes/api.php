@@ -56,6 +56,13 @@ Route::group(['prefix' => 'owner'], function () {
         Route::post('/update', [Owner\LocationController::class, 'updateLocation']);
         Route::get('/all-status', [Owner\LocationController::class, 'allStatus']);
     });
+
+    // Time slot
+    Route::group(['prefix' => 'time-slot'], function () {
+
+        Route::get('/with-price', [Owner\TimeSlotController::class, 'getWithPrice']);
+        Route::post('/update-price-by-timeslot', [Owner\TimeSlotController::class, 'updatePriceByTimeSlot']);
+    });
 });
 
 // Admin

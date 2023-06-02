@@ -18,11 +18,11 @@ class UserController extends Controller
 
     public function postVerification(Request $req)
     {
-        if (!$req->has(['id', 'status_id'])) {
+        if ($req->has(['owner_id', 'status_id'])) {
 
-            $owner = User::find($req->id);
+            $owner = User::where('id', $req->owner_id)->first();
 
-            if ($owner->status_id == 1) {
+            if ($owner->status_id == 1 && $owner->role_id == 2) {
 
                 $owner->status_id = $req->status_id;
                 $owner->save();

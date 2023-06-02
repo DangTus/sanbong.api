@@ -24,4 +24,21 @@ class TimeSlot extends Model
             'time_end' => Carbon::createFromFormat('H:i:s', $this->time_end)->format('H:i'),
         ];
     }
+
+    public function getWithPrice($location_id, $fieldtype_id)
+    {
+        $price = Price::where('location_id', $location_id)
+            ->where('fieldtype_id', $fieldtype_id)
+            ->where('timeslot_id', $this->id)
+            ->first();
+
+        $price = $price ? $price->value : null;
+
+        return [
+            'id' => $this->id,
+            'time_start' => Carbon::createFromFormat('H:i:s', $this->time_start)->format('H:i'),
+            'time_end' => Carbon::createFromFormat('H:i:s', $this->time_end)->format('H:i'),
+            'price' => $price
+        ];
+    }
 }
