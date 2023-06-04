@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\FieldController;
 use App\Http\Controllers\HomeController;
 
 /*
@@ -43,8 +44,19 @@ Route::group(['prefix' => 'location'], function () {
     Route::post('/book-field', [Customer\LocationController::class, 'bookField']);
 });
 
+// Field Type
 Route::get('/field-type', [HomeController::class, 'fieldType']);
-Route::get('/field-by-type-and-location', [Customer\FieldController::class, 'fieldByTypeAndLocation']);
+
+// Field
+Route::group(['prefix' => 'field'], function () {
+
+    Route::get('/by-location', [FieldController::class, 'getByLocation']);
+    Route::get('/by-type-and-location', [FieldController::class, 'getByTypeAndLocation']);
+    Route::get('/by-id', [FieldController::class, 'getById']);
+    Route::post('/create', [FieldController::class, 'create']);
+    Route::post('/update', [FieldController::class, 'update']);
+    Route::post('/delete', [FieldController::class, 'delete']);
+});
 
 // Owner
 Route::group(['prefix' => 'owner'], function () {
