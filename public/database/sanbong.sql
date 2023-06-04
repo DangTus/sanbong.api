@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th6 02, 2023 lúc 12:55 PM
+-- Thời gian đã tạo: Th6 04, 2023 lúc 03:58 AM
 -- Phiên bản máy phục vụ: 10.4.27-MariaDB
 -- Phiên bản PHP: 8.1.12
 
@@ -49,7 +49,9 @@ CREATE TABLE `booking` (
 
 INSERT INTO `booking` (`id`, `timeslot_id`, `field_id`, `customer_id`, `customer_name`, `phone_number`, `date_book`, `price`, `note`, `log`, `status_id`, `created_at`, `updated_at`) VALUES
 (1, 3, 1, 5, 'Nguyễn Thành Viên', '0123456789', '2023-06-30', 200000, NULL, NULL, 2, '2023-05-31 22:44:36', '2023-05-31 22:44:36'),
-(2, 3, 1, 5, 'Nguyễn Thành Viên', '0123456789', '2023-06-10', 200000, NULL, '07:52:53 02-06-2023: Booking has been created;', 1, '2023-06-02 00:52:53', '2023-06-02 00:52:53');
+(2, 3, 1, 5, 'Nguyễn Thành Viên', '0123456789', '2023-06-10', 200000, NULL, '07:52:53 02-06-2023: Booking has been created;', 1, '2023-06-02 00:52:53', '2023-06-02 00:52:53'),
+(3, 15, 8, 5, 'Nguyễn Thành Viên', '0123456789', '2023-06-10', 300000, NULL, '08:56:34 04-06-2023: Booking has been created;', 1, '2023-06-04 01:56:34', '2023-06-04 01:56:34'),
+(4, 15, 8, 5, 'Nguyễn Thành Viên', '0123456789', '2023-05-10', 300000, NULL, '08:57:18 04-06-2023: Booking has been created;', 4, '2023-06-04 01:57:18', '2023-06-04 01:57:18');
 
 -- --------------------------------------------------------
 
@@ -810,7 +812,7 @@ CREATE TABLE `field` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `description` text NOT NULL,
-  `type_id` int(11) DEFAULT NULL,
+  `type_id` int(11) NOT NULL,
   `location_id` int(11) NOT NULL,
   `status_id` int(11) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
@@ -824,7 +826,25 @@ CREATE TABLE `field` (
 INSERT INTO `field` (`id`, `name`, `description`, `type_id`, `location_id`, `status_id`, `created_at`, `updated_at`) VALUES
 (1, 'Sân 1', 'Sân này mới nhất', 1, 1, 1, '2023-05-27 17:21:39', '2023-05-27 17:21:39'),
 (2, 'Sân 2', 'Sân này mới nhất', 2, 1, 1, '2023-05-27 17:22:12', '2023-05-27 17:22:12'),
-(3, 'Sân 3', 'Sân này tạm dừng một thời gian', 1, 1, 2, '2023-05-28 16:42:58', '2023-05-28 16:42:58');
+(3, 'Sân 3', 'Sân này tạm dừng một thời gian', 1, 1, 2, '2023-05-28 16:42:58', '2023-05-28 16:42:58'),
+(6, 'Sân nhỏ 1', 'Sân này mới nhất', 1, 3, 1, '2023-06-04 08:48:56', '2023-06-04 08:48:56'),
+(7, 'Sân lớn', 'Sân này mới nhất', 2, 3, 1, '2023-06-04 08:49:17', '2023-06-04 08:49:17'),
+(8, 'Sân nhỏ 2', 'Sân này mới nhất', 1, 3, 1, '2023-06-04 08:54:31', '2023-06-04 08:54:31');
+
+--
+-- Bẫy `field`
+--
+DELIMITER $$
+CREATE TRIGGER `trigger_field_lock` AFTER UPDATE ON `field` FOR EACH ROW BEGIN
+	IF NEW.status_id != 1 THEN
+        UPDATE booking
+        SET status_id = 3
+        WHERE field_id = NEW.id 
+        	AND status_id in (1, 2);
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -897,8 +917,23 @@ CREATE TABLE `location` (
 --
 
 INSERT INTO `location` (`id`, `name`, `description`, `owner_id`, `image`, `time_open`, `time_close`, `ward_id`, `address`, `link_map`, `status_id`, `created_at`, `updated_at`) VALUES
-(1, 'Hòa Tiến Vip', 'Sân này vip nhất Hòa Tiến', 2, '[\"location-hoa-tien-vip-1.png\"]', '07:00:00', '22:00:00', 20227, 'Dương Sơn', 'https://goo.gl/maps/UisAzZN1mEVQC8K19', 1, '2023-05-27 17:20:18', '2023-06-02 04:50:50'),
-(2, 'Hòa Khóa', 'Sân này bị khóa', 2, '[\"/public/imgs/field_2_1.jpg\",\"/public/imgs/field_2_2.jpg\",\"/public/imgs/field_2_3.jpg\",\"/public/imgs/field_2_4.jpg\"]', '07:00:00', '22:00:00', 20236, 'Dương Khóa', 'https://goo.gl/maps/UisAzZN1mEVQC8K19', 3, '2023-05-27 17:20:18', '2023-05-27 17:20:18');
+(1, 'Thuận Phước Vip', 'Sân này VIP nhất phường Thuận Phước', 2, '[\"location-hoa-tien-vip-1.jpg\",\"location-hoa-tien-vip-2.jpg\",\"location-hoa-tien-vip-3.jpg\",\"location-hoa-tien-vip-4.jpg\"]', '07:00:00', '22:00:00', 20230, NULL, 'https://goo.gl/maps/UisAzZN1mEVQC8K19', 1, '2023-05-27 17:20:18', '2023-06-04 01:35:31'),
+(2, 'Hòa Khóa', 'Sân này tạm ngưng hoạt động', 4, '[\"location-hoa-tien-vip-1.jpg\",\"location-hoa-tien-vip-2.jpg\",\"location-hoa-tien-vip-3.jpg\",\"location-hoa-tien-vip-4.jpg\"]', '07:00:00', '22:00:00', 20236, NULL, NULL, 3, '2023-05-27 17:20:18', '2023-05-27 17:20:18'),
+(3, 'Thanh Bình VIP', 'Sân này VIP nhất phường Thanh Bình', 3, '[\"location-hoa-tien-vip-1.jpg\",\"location-hoa-tien-vip-2.jpg\",\"location-hoa-tien-vip-3.jpg\",\"location-hoa-tien-vip-4.jpg\"]', '07:00:00', '22:00:00', 20227, NULL, 'https://goo.gl/maps/UisAzZN1mEVQC8K19', 1, '2023-06-04 08:38:03', '2023-06-04 08:38:03');
+
+--
+-- Bẫy `location`
+--
+DELIMITER $$
+CREATE TRIGGER `trigger_location_lock` AFTER UPDATE ON `location` FOR EACH ROW BEGIN
+	IF NEW.status_id != 1 THEN
+        UPDATE field
+        SET status_id = 3
+        WHERE location_id = NEW.id;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -943,31 +978,57 @@ CREATE TABLE `price` (
 
 INSERT INTO `price` (`timeslot_id`, `fieldtype_id`, `location_id`, `value`, `created_at`, `updated_at`) VALUES
 (3, 1, 1, 200000, '2023-05-28 16:47:12', '2023-05-28 16:47:12'),
+(3, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (3, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(3, 2, 3, 400000, '2023-06-04 01:53:23', '2023-06-04 01:53:23'),
 (4, 1, 1, 200000, '2023-05-28 16:48:01', '2023-05-28 16:48:01'),
+(4, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (4, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(4, 2, 3, 400000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (5, 1, 1, 200000, '2023-05-28 16:48:01', '2023-05-28 16:48:01'),
+(5, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (5, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(5, 2, 3, 400000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (6, 1, 1, 200000, '2023-05-28 16:48:01', '2023-05-28 16:48:01'),
+(6, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (6, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(6, 2, 3, 400000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (7, 1, 1, 200000, '2023-05-28 16:48:01', '2023-05-28 16:48:01'),
+(7, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (7, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(7, 2, 3, 400000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (10, 1, 1, 200000, '2023-05-28 16:48:42', '2023-05-28 16:48:42'),
+(10, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (10, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(10, 2, 3, 400000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (11, 1, 1, 200000, '2023-05-28 16:48:42', '2023-05-28 16:48:42'),
+(11, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (11, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(11, 2, 3, 400000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (12, 1, 1, 200000, '2023-05-28 16:48:42', '2023-05-28 16:48:42'),
+(12, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (12, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(12, 2, 3, 400000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (13, 1, 1, 200000, '2023-05-28 16:48:42', '2023-05-28 16:48:42'),
+(13, 1, 3, 200000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (13, 2, 1, 400000, '2023-05-28 16:51:44', '2023-05-28 16:51:44'),
+(13, 2, 3, 400000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (14, 1, 1, 300000, '2023-05-28 16:49:27', '2023-05-28 16:49:27'),
+(14, 1, 3, 300000, '2023-06-04 01:52:42', '2023-06-04 01:52:42'),
 (14, 2, 1, 500000, '2023-05-28 16:52:25', '2023-05-28 16:52:25'),
+(14, 2, 3, 500000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (15, 1, 1, 300000, '2023-05-28 16:49:27', '2023-05-28 16:49:27'),
+(15, 1, 3, 300000, '2023-06-04 01:52:43', '2023-06-04 01:52:43'),
 (15, 2, 1, 500000, '2023-05-28 16:52:25', '2023-05-28 16:52:25'),
+(15, 2, 3, 500000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (16, 1, 1, 300000, '2023-05-28 16:49:27', '2023-05-28 16:49:27'),
+(16, 1, 3, 300000, '2023-06-04 01:52:43', '2023-06-04 01:52:43'),
 (16, 2, 1, 500000, '2023-05-28 16:52:25', '2023-05-28 16:52:25'),
+(16, 2, 3, 500000, '2023-06-04 01:53:24', '2023-06-04 01:53:24'),
 (17, 1, 1, 300000, '2023-05-28 16:49:27', '2023-05-28 16:49:27'),
-(17, 2, 1, 500000, '2023-05-28 16:52:25', '2023-05-28 16:52:25');
+(17, 1, 3, 300000, '2023-06-04 01:52:43', '2023-06-04 01:52:43'),
+(17, 2, 1, 500000, '2023-05-28 16:52:25', '2023-05-28 16:52:25'),
+(17, 2, 3, 500000, '2023-06-04 01:53:24', '2023-06-04 01:53:24');
 
 -- --------------------------------------------------------
 
@@ -1120,6 +1181,27 @@ INSERT INTO `user` (`id`, `name`, `dob`, `phone_number`, `email`, `password`, `r
 (3, 'Nguyễn Chủ Sân 2', '2013-05-01', '0123456789', 'chusan2@gmail.com', 'admin', 2, 2, '2023-05-27 17:14:46', '2023-06-02 07:37:25'),
 (4, 'Nguyễn Chủ Sân Khóa', '2013-05-01', '0123456789', 'chusankhoa@gmail.com', 'admin', 2, 4, '2023-05-29 22:11:16', '2023-05-29 22:11:16'),
 (5, 'Nguyễn Thành Viên', '2013-05-01', '0123456789', 'thanhvien1@gmail.com', 'admin', 1, 2, '2023-05-27 17:13:10', '2023-05-27 17:13:10');
+
+--
+-- Bẫy `user`
+--
+DELIMITER $$
+CREATE TRIGGER `trigger_owner_account_lock` AFTER UPDATE ON `user` FOR EACH ROW BEGIN
+	IF NEW.status_id = 4 THEN
+    	IF NEW.role_id = 2 THEN
+            UPDATE location
+            SET status_id = 3
+            WHERE owner_id = NEW.id;
+		ELSEIF NEW.role_id = 1 THEN
+        	UPDATE booking
+            SET status_id = 3
+            WHERE customer_id = NEW.id
+            	AND status_id in (1, 2);
+		END IF;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -11924,7 +12006,7 @@ ALTER TABLE `ward`
 -- AUTO_INCREMENT cho bảng `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `booking_status`
@@ -11942,7 +12024,7 @@ ALTER TABLE `district`
 -- AUTO_INCREMENT cho bảng `field`
 --
 ALTER TABLE `field`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `field_status`
@@ -11960,7 +12042,7 @@ ALTER TABLE `field_type`
 -- AUTO_INCREMENT cho bảng `location`
 --
 ALTER TABLE `location`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `location_status`

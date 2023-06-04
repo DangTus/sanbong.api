@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Price extends Model
 {
@@ -39,8 +40,8 @@ class Price extends Model
 
         return [
             'timeslot_id' => $this->timeSlot->id,
-            'times_start' => $this->timeSlot->time_start,
-            'time_end' => $this->timeSlot->time_end,
+            'time_start' => Carbon::createFromFormat('H:i:s', $this->timeSlot->time_start)->format('H:i'),
+            'time_end' => Carbon::createFromFormat('H:i:s', $this->timeSlot->time_end)->format('H:i'),
             'value' => $this->value,
             'status' => $status
         ];
