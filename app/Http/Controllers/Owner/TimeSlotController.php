@@ -87,7 +87,7 @@ class TimeSlotController extends Controller
 
                 return response()->json([
                     'status' => 'error',
-                    'data' => $e->getMessage()
+                    'error' => $e->getMessage()
                 ]);
             }
         } else {

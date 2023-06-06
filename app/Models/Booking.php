@@ -34,4 +34,21 @@ class Booking extends Model
     {
         return $this->hasOne(BookingStatus::class, 'id', 'status_id');
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'timeSlot' => $this->timeSlot,
+            'field' => $this->field,
+            'customer' => $this->customer,
+            'customer_name' => $this->customer_name,
+            'phone_number' => $this->phone_number,
+            'date_book' => $this->date_book,
+            'price' => $this->price,
+            'note' => $this->note,
+            'log' => $this->log,
+            'status' => $this->status,
+        ];
+    }
 }

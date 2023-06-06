@@ -7,7 +7,7 @@ use App\Http\Controllers\Owner;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\HomeController;
@@ -47,6 +47,13 @@ Route::group(['prefix' => 'location'], function () {
 // Field Type
 Route::get('/field-type', [HomeController::class, 'fieldType']);
 
+// Customer
+Route::group(['prefix' => 'customer'], function () {
+
+    Route::get('/by-id', [CustomerController::class, 'getById']);
+    Route::post('/update', [CustomerController::class, 'update']);
+});
+
 // Field
 Route::group(['prefix' => 'field'], function () {
 
@@ -56,6 +63,14 @@ Route::group(['prefix' => 'field'], function () {
     Route::post('/create', [FieldController::class, 'create']);
     Route::post('/update', [FieldController::class, 'update']);
     Route::post('/delete', [FieldController::class, 'delete']);
+});
+
+// Booking
+Route::group(['prefix' => 'booking'], function () {
+
+    Route::get('/by-location', [Owner\BookingController::class, 'getByLocation']);
+    Route::get('/by-id', [Owner\BookingController::class, 'getById']);
+    Route::post('/update', [Owner\BookingController::class, 'update']);
 });
 
 // Owner
