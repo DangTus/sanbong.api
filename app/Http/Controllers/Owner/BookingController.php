@@ -29,7 +29,30 @@ class BookingController extends Controller
                 })
                 ->orderBy('status_id')
                 ->orderBy('date_book')
-                ->get();
+                ->orderBy('timeslot_id');
+
+            if ($req->date_book) {
+
+                try {
+
+                    Carbon::createFromFormat('Y-m-d', $req->date_book);
+                    $listBooking->where('date_book', $req->date_book);
+                } catch (\Exception $e) {
+
+                    return response()->json([
+                        'status' => 'error',
+                        'error' => 'Ngày phải đúng định dạng Y-m-d'
+                    ]);
+                }
+            }
+            if ($req->status_id) {
+                $listBooking->where('status_id', $req->status_id);
+            }
+            if ($req->field_id) {
+                $listBooking->where('field_id', $req->field_id);
+            }
+
+            $listBooking = $listBooking->get();
 
             return response()->json([
                 'status' => 'success',
@@ -98,23 +121,30 @@ class BookingController extends Controller
 
             $isUpdate = false;
             $message = '';
-            $log = $booking->log . Carbon::now()->addHours(7)->format('H:i:s d-m-Y');
+            $log = $booking->log . Carbon::now()->format('H:i:s d-m-Y');
+            $datetimeBooking = Carbon::createFromFormat('Y-m-d H:i:s', $booking->date_book . ' ' . $booking->timeSlot->time_start);
 
             if ($request->status_id == 2 && $booking->status_id == 1) {
 
-                $isUpdate = true;
-                $message = 'Duyệt đơn thành công!';
-                $log .= ': Booking has been approved;';
-            } else if ($request->status_id == 3 && ($booking->status_id == 1 || $booking->status_id == 2)) {
+                if ($datetimeBooking->isFuture()) {
+
+                    $isUpdate = true;
+                    $message = 'Duyệt đơn thành công!';
+                    $log .= ': Booking has been approved;';
+                }
+            } elseif ($request->status_id == 3 && ($booking->status_id == 1 || $booking->status_id == 2)) {
 
                 $isUpdate = true;
                 $message = 'Hủy đơn thành công!';
                 $log .= ': Booking has been canceled;';
-            } else if ($request->status_id == 4 && $booking->status_id == 2) {
+            } elseif ($request->status_id == 4) {
 
-                $isUpdate = true;
-                $message = 'Xác nhận thanh toán thành công!';
-                $log .= ': Booking has been paid;';
+                if ($booking->status_id == 2 || ($booking->status_id == 1 && $datetimeBooking->isPast())) {
+
+                    $isUpdate = true;
+                    $message = 'Xác nhận thanh toán thành công!';
+                    $log .= ': Booking has been paid;';
+                }
             }
 
             if ($isUpdate) {
@@ -125,13 +155,13 @@ class BookingController extends Controller
 
                 return response()->json([
                     'status' => 'success',
-                    'message' => $message
+                    'message' => $message,
                 ]);
             } else {
 
                 return response()->json([
                     'status' => 'error',
-                    'error' => 'Bạn không thể thực hiện hành động với đơn hàng này',
+                    'error' => 'Bạn không thể thực hiện hành động với đơn đặt sân này!',
                 ]);
             }
         } catch (\Exception $e) {

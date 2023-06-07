@@ -127,7 +127,7 @@ class LocationController extends Controller
             } else {
 
                 $note = $req->input('note');
-                $log = Carbon::now()->addHours(7)->format('H:i:s d-m-Y') . ': Booking has been created;';
+                $log = Carbon::now()->format('H:i:s d-m-Y') . ': Booking has been created;';
 
                 $bookNew = Booking::create([
                     'timeslot_id' => $req->timeslot_id,
