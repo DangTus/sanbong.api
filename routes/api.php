@@ -79,7 +79,7 @@ Route::group(['prefix' => 'owner'], function () {
     // Location
     Route::group(['prefix' => 'location'], function () {
 
-        Route::get('/', [Owner\LocationController::class, 'locationByUser']);
+        Route::get('/', [Owner\LocationController::class, 'locationByOwner']);
         Route::post('/update', [Owner\LocationController::class, 'updateLocation']);
         Route::get('/all-status', [Owner\LocationController::class, 'allStatus']);
     });

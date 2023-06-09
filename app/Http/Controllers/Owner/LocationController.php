@@ -21,31 +21,30 @@ class LocationController extends Controller
         ]);
     }
 
-    public function locationByUser(Request $req)
+    public function locationByOwner(Request $request)
     {
-        if ($req->has(['owner_id'])) {
-
-            $location = Location::where('owner_id', $req->owner_id)->first();
-
-            if ($location) {
-
-                return response()->json([
-                    'status' => 'success',
-                    'data' => $location
-                ]);
-            } else {
-
-                return response()->json([
-                    'status' => 'failed',
-                    'message' => 'Cannot find location'
-                ]);
-            }
-        } else {
+        if (!$request->has(['owner_id'])) {
 
             return response()->json([
                 'status' => 'error',
                 'data' => null,
                 'error' => 'Missing parameter passed!'
+            ]);
+        }
+
+        $location = Location::where('owner_id', $request->owner_id)->first();
+
+        if ($location) {
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $location
+            ]);
+        } else {
+
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Cannot find location'
             ]);
         }
     }
